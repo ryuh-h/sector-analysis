@@ -5,8 +5,7 @@ import pandas as pd
 from dtaidistance import dtw
 import os
 
-
-def perform_clustering(filename, root_dir, n_clusters=2):
+def perform_clustering(filename, root_dir, n_clusters=3):
     # Load the cleaned data
     input_path = os.path.join(root_dir, 'data', 'cleaned', filename)
     output_dir = os.path.join(root_dir, 'data', 'final')
@@ -17,9 +16,12 @@ def perform_clustering(filename, root_dir, n_clusters=2):
 
     data = pd.read_csv(input_path)
 
-    # Standardize the 'Close' column for clustering
+    # Apply a moving average to smooth the 'Close' column
+    data['Smoothed_Close'] = data['Close'].rolling(window=30, min_periods=1).mean()
+
+    # Standardise the smoothed 'Close' columns for clustering
     scaler = StandardScaler()
-    normalized_data = scaler.fit_transform(data[['Close']])
+    normalized_data = scaler.fit_transform(data[['Smoothed_Close']])
 
     # K-Means Clustering
     kmeans = KMeans(n_clusters=n_clusters, n_init=10, random_state=42)
@@ -36,6 +38,10 @@ def perform_clustering(filename, root_dir, n_clusters=2):
         dtw_distances.append(dtw_distance)
     data['DTW_Distance'] = [0] + dtw_distances  # Pad first value with 0
 
+    # Add major market events (for context in later visualizations)
+    # Example: Add a 'Major_Event' column marking significant events
+    data['Major_Event'] = data['Date'].apply(lambda x: 'Pandemic' if '2020' in str(x) else 'None')
+
     # Ensure the final directory exists
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
@@ -48,7 +54,6 @@ def perform_clustering(filename, root_dir, n_clusters=2):
     # Save clustered data to final directory
     print(f"Saving clustered data to: {output_path}")  # Debug statement
     data.to_csv(output_path, index=False)
-
 
 if __name__ == "__main__":
     # Determine root directory for testing purposes
