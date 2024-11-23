@@ -1,6 +1,6 @@
 # Sector Analysis using LSTM and Clustering Techniques
 
-This project analyzes key financial sectors, including **Technology**, **Healthcare**, **Energy**, and **Finance**, using historical stock data to understand market trends and predict future movements. The project leverages **LSTM** (Long Short-Term Memory) neural networks for time-series forecasting and employs clustering techniques (**K-Means** and **Gaussian Mixture Models**) to identify underlying patterns in the data. Visualizations are used throughout to provide intuitive insights.
+This project analyzes key financial sectors, including **Technology**, **Healthcare**, **Energy**, and **Finance**, using historical stock data to understand market trends and predict future movements. The project leverages **LSTM** (Long Short-Term Memory) neural networks for time-series forecasting and employs clustering techniques (**K-Means** and **Gaussian Mixture Models**) to identify underlying patterns in the data. Visualisations are used throughout to provide intuitive insights.
 
 ## Project Overview
 
@@ -17,7 +17,7 @@ This project analyzes key financial sectors, including **Technology**, **Healthc
 
 - **Visualisations**: Created to explore trends, evaluate the impact of key macroeconomic events (e.g., COVID-19), and analyze clusters.
 
-The project is organized into multiple steps: **data collection**, **preprocessing**, **exploratory data analysis (EDA)**, **clustering**, **LSTM model training**, **visualizations**, and **evaluation**.
+The project is organized into multiple steps: **data collection**, **preprocessing**, **exploratory data analysis (EDA)**, **clustering**, **LSTM model training**, **visualisations**, and **evaluation**.
 
 ## Project Structure
 The project is organized into the following main folders and scripts:
@@ -36,10 +36,10 @@ FYP Code/
 ├── scripts/
 │   ├── data_collection.py  # Downloads historical stock data from Yahoo Finance
 │   ├── data_preprocessing.py # Preprocesses raw data (cleaning, feature engineering)
-│   ├── eda.py              # Conducts exploratory data analysis and visualizations
+│   ├── eda.py              # Conducts exploratory data analysis and visualisations
 │   ├── clustering.py       # Clusters sectors based on historical trends
 │   ├── lstm_model.py       # Trains LSTM models for sector prediction
-│   ├── visualisation.py    # Generates final visualizations of results
+│   ├── visualisation.py    # Generates final visualisations of results
 │   └── evaluation.py       # Evaluates clustering and prediction performance
 │
 ├── visualisations/         # Contains generated plots and visual reports
@@ -56,7 +56,7 @@ FYP Code/
    - Cleans data, converts data types, removes outliers, and calculates new features like daily returns.
 
 3. **Exploratory Data Analysis (EDA)**:
-   - Generates visualizations for closing prices, daily returns, and the impact of key macroeconomic events.
+   - Generates visualisations for closing prices, daily returns, and the impact of key macroeconomic events.
 
 4. **Clustering**:
    - Uses K-Means and GMM to cluster the daily returns and gain insight into market behaviour.
@@ -83,4 +83,4 @@ FYP Code/
 The project results include:
 - **Clusters of Financial Sectors**: Using K-Means and GMM, each sector has been grouped based on historical behavior, revealing similarities.
 - **LSTM Predictions**: LSTM models were used to predict future trends based on historical data, with evaluation metrics showing the performance for each sector.
-- **Visualization Reports**: Detailed visualizations that illustrate sector trends, the impact of major events like COVID-19, and clustering results.
+- **Visualisation Reports**: Detailed visualisations that illustrate sector trends, the impact of major events like COVID-19, and clustering results.
