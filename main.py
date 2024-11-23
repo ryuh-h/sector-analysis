@@ -49,19 +49,19 @@ def main():
     for cleaned_file in cleaned_files:
         eda.perform_eda(cleaned_file, ROOT_DIR)
 
-    # # Step 4: Clustering
-    # print("Performing Clustering:")
-    # for cleaned_file in cleaned_files:
-    #     clustering.perform_clustering(cleaned_file, ROOT_DIR)
-    #
-    # # Step 5: Model Training
-    # print("Training LSTM Model:")
-    # for filename in os.listdir(final_data_dir):
-    #     if filename.endswith('_clustered.csv'):
-    #         lstm_model.train_lstm(filename, ROOT_DIR)
-    #
-    # Step 6: Visualizations
-    print("Creating Visualizations:")
+    # Step 4: Clustering
+    print("Performing Clustering:")
+    for cleaned_file in cleaned_files:
+        clustering.perform_clustering(cleaned_file, ROOT_DIR)
+
+    # Step 5: Model Training
+    print("Training LSTM Model:")
+    for filename in os.listdir(final_data_dir):
+        if filename.endswith('_clustered.csv'):
+            lstm_model.train_lstm(filename, ROOT_DIR)
+
+    # Step 6: Visualisations
+    print("Creating Visualisations:")
     for filename in os.listdir(final_data_dir):
         if filename.endswith('_clustered.csv'):
             visualisation.create_visualisations(filename, ROOT_DIR)

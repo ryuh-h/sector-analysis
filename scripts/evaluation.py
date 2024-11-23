@@ -81,12 +81,12 @@ if __name__ == "__main__":
     # Define the root directory of the project
     root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    # Define directories for clustered CSV files, model files, and visualizations
+    # Define directories for clustered CSV files, model files, and visualisations
     final_data_dir = os.path.join(root_dir, 'data', 'final')
     model_dir = os.path.join(root_dir, 'models')
-    visualisations_dir = os.path.join(root_dir, 'visualizations')
+    visualisations_dir = os.path.join(root_dir, 'visualisations')
 
-    # Ensure visualizations directory exists
+    # Ensure visualisations directory exists
     if not os.path.exists(visualisations_dir):
         os.makedirs(visualisations_dir)
 
@@ -124,7 +124,7 @@ if __name__ == "__main__":
         else:
             print(f"No corresponding model found for {clustered_file}.")
 
-    # Visualize Silhouette Scores for all sectors
+    # Visualise Silhouette Scores for all sectors
     if silhouette_scores:
         plt.figure(figsize=(10, 6))
         sns.barplot(x=sector_names, y=silhouette_scores, hue=sector_names, palette='viridis', dodge=False, legend=False)
@@ -133,9 +133,9 @@ if __name__ == "__main__":
         output_path_silhouette = os.path.join(visualisations_dir, 'all_sectors_silhouette_scores.png')
         plt.savefig(output_path_silhouette)
         plt.close()
-        print(f"Silhouette Scores visualization saved to: {output_path_silhouette}")
+        print(f"Silhouette Scores visualisation saved to: {output_path_silhouette}")
 
-    # Visualize MAE and RMSE for all sectors
+    # Visualise MAE and RMSE for all sectors
     if mae_scores and rmse_scores:
         plt.figure(figsize=(12, 6))
         x = np.arange(len(sector_names))  # the label locations
@@ -152,13 +152,13 @@ if __name__ == "__main__":
         ax.set_xticklabels(sector_names)
         ax.legend()
 
-        # Save the visualization
+        # Save the visualisation
         output_path_metrics = os.path.join(visualisations_dir, 'all_sectors_evaluation_metrics.png')
         plt.savefig(output_path_metrics)
         plt.close()
-        print(f"Evaluation metrics visualization saved to: {output_path_metrics}")
+        print(f"Evaluation metrics visualisation saved to: {output_path_metrics}")
 
-    # Visualize LSTM Predictions vs Actual for all sectors
+    # Visualise LSTM Predictions vs Actual for all sectors
     if lstm_predictions and lstm_actuals:
         plt.figure(figsize=(14, 8))
         for i, sector_name in enumerate(sector_names):
@@ -173,4 +173,4 @@ if __name__ == "__main__":
         output_path_pred = os.path.join(visualisations_dir, 'all_sectors_lstm_predictions.png')
         plt.savefig(output_path_pred)
         plt.close()
-        print(f"LSTM Predictions visualization saved to: {output_path_pred}")
+        print(f"LSTM Predictions visualisation saved to: {output_path_pred}")

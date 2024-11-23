@@ -6,13 +6,13 @@ import os
 def perform_eda(filename, root_dir):
     # Define paths relative to the project root directory
     input_path = os.path.join(root_dir, 'data', 'cleaned', filename)
-    output_dir = os.path.join(root_dir, 'visualizations')
+    output_dir = os.path.join(root_dir, 'visualisations')
 
     # Print debug information to ensure correct paths
     print(f"Input Path: {input_path}")
     print(f"Output Directory: {output_dir}")
 
-    # Create the visualizations directory if it doesn't exist
+    # Create the visualisations directory if it doesn't exist
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 

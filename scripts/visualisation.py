@@ -8,11 +8,11 @@ def create_visualisations(filename, root_dir):
     try:
         # Load the final clustered dataset
         input_path = os.path.join(root_dir, 'data', 'final', filename)
-        visualisations_dir = os.path.join(root_dir, 'visualizations')
+        visualisations_dir = os.path.join(root_dir, 'visualisations')
 
         # Print debug information for verification
         print(f"Input Path: {input_path}")
-        print(f"Visualizations Directory: {visualisations_dir}")
+        print(f"Visualisations Directory: {visualisations_dir}")
 
         # Load data
         data = pd.read_csv(input_path)
@@ -24,7 +24,7 @@ def create_visualisations(filename, root_dir):
         else:
             raise ValueError("The 'Date' column is missing from the dataset.")
 
-        # Visualization 1: Closing Prices Over Time (Individual)
+        # Visualisation 1: Closing Prices Over Time (Individual)
         if 'Close' in data.columns:
             plt.figure(figsize=(10, 6))
             sns.lineplot(data=data, x='Date', y='Close')
@@ -36,7 +36,7 @@ def create_visualisations(filename, root_dir):
             plt.savefig(os.path.join(visualisations_dir, f'{filename}_closing_prices.png'))
             plt.close()
 
-        # Visualization 2: Volatility Over Time (Rolling Standard Deviation)
+        # Visualisation 2: Volatility Over Time (Rolling Standard Deviation)
         if 'Close' in data.columns:
             plt.figure(figsize=(10, 6))
             data['Volatility'] = data['Close'].rolling(window=30).std()
@@ -49,10 +49,10 @@ def create_visualisations(filename, root_dir):
             plt.savefig(os.path.join(visualisations_dir, f'{filename}_volatility.png'))
             plt.close()
 
-        print(f'Visualizations for {filename} saved successfully.')
+        print(f'Visualisations for {filename} saved successfully.')
 
     except Exception as e:
-        print(f"Error during visualization creation for {filename}: {e}")
+        print(f"Error during visualisation creation for {filename}: {e}")
         if 'data' in locals():
             print(f"Available columns in dataset: {data.columns.tolist()}")
 
@@ -61,7 +61,7 @@ def create_comparative_visualisations(root_dir):
     try:
         # Define final data directory
         final_data_dir = os.path.join(root_dir, 'data', 'final')
-        visualisations_dir = os.path.join(root_dir, 'visualizations')
+        visualisations_dir = os.path.join(root_dir, 'visualisations')
 
         # Load all clustered datasets into a single DataFrame
         combined_data = pd.DataFrame()
@@ -74,7 +74,7 @@ def create_comparative_visualisations(root_dir):
                     sector_data['Date'] = pd.to_datetime(sector_data['Date'], errors='coerce')
                 combined_data = pd.concat([combined_data, sector_data], ignore_index=True)
 
-        # Comparative Visualization 1: K-Means Clustering Results (All Sectors)
+        # Comparative Visualisation 1: K-Means Clustering Results (All Sectors)
         if 'KMeans_Cluster' in combined_data.columns:
             plt.figure(figsize=(12, 8))
             sns.scatterplot(data=combined_data, x='Date', y='Close', hue='Sector', style='KMeans_Cluster', palette='viridis')
@@ -86,7 +86,7 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, 'all_sectors_kmeans_clusters.png'))
             plt.close()
 
-        # Comparative Visualization 2: Gaussian Mixture Model Clustering Results (All Sectors)
+        # Comparative Visualisation 2: Gaussian Mixture Model Clustering Results (All Sectors)
         if 'GMM_Cluster' in combined_data.columns:
             plt.figure(figsize=(12, 8))
             sns.scatterplot(data=combined_data, x='Date', y='Close', hue='Sector', style='GMM_Cluster', palette='plasma')
@@ -98,7 +98,7 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, 'all_sectors_gmm_clusters.png'))
             plt.close()
 
-        # Comparative Visualization 3: Dynamic Time Warping Distances Over Time (Subplots for All Sectors)
+        # Comparative Visualisation 3: Dynamic Time Warping Distances Over Time (Subplots for All Sectors)
         if 'DTW_Distance' in combined_data.columns:
             sectors = combined_data['Sector'].unique()
             num_sectors = len(sectors)
@@ -114,7 +114,7 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, 'all_sectors_dtw_distances.png'))
             plt.close()
 
-        # Comparative Visualization 4: Correlation Heatmap of Closing Prices
+        # Comparative Visualisation 4: Correlation Heatmap of Closing Prices
         pivot_data = combined_data.pivot(index='Date', columns='Sector', values='Close')
         plt.figure(figsize=(10, 8))
         sns.heatmap(pivot_data.corr(), annot=True, cmap='coolwarm', linewidths=0.5)
@@ -123,7 +123,7 @@ def create_comparative_visualisations(root_dir):
         plt.savefig(os.path.join(visualisations_dir, 'correlation_heatmap.png'))
         plt.close()
 
-        # Comparative Visualization 5: Volatility Over Time for All Sectors (Separate Subplots)
+        # Comparative Visualisation 5: Volatility Over Time for All Sectors (Separate Subplots)
         sectors = combined_data['Sector'].unique()
         num_sectors = len(sectors)
         fig, axes = plt.subplots(num_sectors, 1, figsize=(12, 4 * num_sectors), sharex=True)
@@ -139,10 +139,10 @@ def create_comparative_visualisations(root_dir):
         plt.savefig(os.path.join(visualisations_dir, 'all_sectors_volatility.png'))
         plt.close()
 
-        print('Comparative visualizations saved successfully.')
+        print('Comparative visualisations saved successfully.')
 
     except Exception as e:
-        print(f"Error during comparative visualization creation: {e}")
+        print(f"Error during comparative visualisation creation: {e}")
         if 'combined_data' in locals():
             print(f"Available columns in combined dataset: {combined_data.columns.tolist()}")
 
@@ -158,11 +158,11 @@ if __name__ == "__main__":
     print(f"Root Directory: {ROOT_DIR}")
     print(f"Final Data Directory: {final_data_dir}")
 
-    # Run visualization for each clustered dataset in the final directory
+    # Run visualisation for each clustered dataset in the final directory
     for filename in os.listdir(final_data_dir):
         if filename.endswith('_clustered.csv'):
             create_visualisations(filename, ROOT_DIR)
 
-    # Run comparative visualizations for all datasets
+    # Run comparative visualisations for all datasets
     create_comparative_visualisations(ROOT_DIR)
 
