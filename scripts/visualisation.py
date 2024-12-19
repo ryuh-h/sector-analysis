@@ -72,7 +72,7 @@ def create_comparative_visualisations(root_dir):
                     sector_data['Date'] = pd.to_datetime(sector_data['Date'], errors='coerce')
                 combined_data = pd.concat([combined_data, sector_data], ignore_index=True)
 
-        # Comparative Visualisation 1: K-Means Clustering Results (All Sectors, Improved)
+        # Comparative Visualisation 1: K-Means Clustering Results (All Sectors)
         if 'KMeans_Cluster' in combined_data.columns:
             plt.figure(figsize=(12, 8))
             sns.scatterplot(data=combined_data, x='Date', y='Close', hue='KMeans_Cluster', style='Sector', palette='viridis')
@@ -81,10 +81,10 @@ def create_comparative_visualisations(root_dir):
             plt.ylabel('Close Price')
             plt.xticks(rotation=45)
             plt.tight_layout()
-            plt.savefig(os.path.join(visualisations_dir, 'improved_all_sectors_kmeans_clusters.png'))
+            plt.savefig(os.path.join(visualisations_dir, 'all_sectors_kmeans_clusters.png'))
             plt.close()
 
-        # Comparative Visualisation 2: Gaussian Mixture Model Clustering Results (All Sectors, Improved)
+        # Comparative Visualisation 2: Gaussian Mixture Model Clustering Results (All Sectors)
         if 'GMM_Cluster' in combined_data.columns:
             plt.figure(figsize=(12, 8))
             sns.scatterplot(data=combined_data, x='Date', y='Close', hue='GMM_Cluster', style='Sector', palette='plasma')
@@ -93,7 +93,7 @@ def create_comparative_visualisations(root_dir):
             plt.ylabel('Close Price')
             plt.xticks(rotation=45)
             plt.tight_layout()
-            plt.savefig(os.path.join(visualisations_dir, 'improved_all_sectors_gmm_clusters.png'))
+            plt.savefig(os.path.join(visualisations_dir, 'all_sectors_gmm_clusters.png'))
             plt.close()
 
         # New Comparative Visualisation: Cluster Membership Over Time for Each Sector (Stacked for All Sectors)

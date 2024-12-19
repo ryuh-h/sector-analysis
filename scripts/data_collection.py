@@ -3,7 +3,6 @@ import os
 
 
 def download_data(ticker, start_date='2014-01-01', end_date='2024-01-01'):
-
     # Download data from Yahoo Finance
     data = yf.download(ticker, start=start_date, end=end_date)
 
@@ -17,4 +16,3 @@ if __name__ == "__main__":
     tickers = ['XLK', 'XLV', 'XLE', 'XLF']
     for ticker in tickers:
         download_data(ticker)
-
