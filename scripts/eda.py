@@ -20,7 +20,7 @@ def perform_eda(filename, root_dir):
     data = pd.read_csv(input_path)
 
     # Ensure 'Date' is in datime format
-    data['Date'] = pd.to_datetime(data['Date'])
+    data['Date'] = pd.to_datetime(data['Date'], format="%Y-%m-%d %H:%M:%S%z", errors='coerce')
 
     # Create 'Daily_Return' column
     data['Daily_Return'] = data['Close'].pct_change()
@@ -87,6 +87,20 @@ def perform_eda(filename, root_dir):
     covid_impact_plot_path = os.path.join(output_dir, f'{base_name}_covid_impact.png')
     print(f"Saving COVID-19 impact plot to: {covid_impact_plot_path}")  # Debug statement
     plt.savefig(covid_impact_plot_path)
+    plt.close()
+
+    # Volatility Over Time (Rolling Standard Deviation)
+    plt.figure(figsize=(10, 6))
+    data['Volatility'] = data['Close'].rolling(window=30).std()
+    sns.lineplot(data=data, x='Date', y='Volatility')
+    plt.title(f'Volatility Over Time for {filename}')
+    plt.xlabel('Date')
+    plt.ylabel('Volatility (Rolling Std Dev)')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    volatility_plot_path = os.path.join(output_dir, f'{base_name}_volatility.png')
+    print(f"Saving volatility plot to: {volatility_plot_path}")  # Debug statement
+    plt.savefig(volatility_plot_path)
     plt.close()
 
 

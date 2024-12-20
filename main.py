@@ -63,9 +63,6 @@ def main():
 
     # Step 6: Visualisations
     print("Creating Visualisations:")
-    for filename in os.listdir(final_data_dir):
-        if filename.endswith('_clustered.csv'):
-            visualisation.create_visualisations(filename, ROOT_DIR)
     visualisation.create_comparative_visualisations(ROOT_DIR)
 
     # Step 7: Evaluation
