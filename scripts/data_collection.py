@@ -11,6 +11,7 @@ def download_data(ticker, start_date='2014-01-01', end_date='2024-01-01'):
     print(f'Data for {ticker} saved successfully.')
 
 
+# Testing
 if __name__ == "__main__":
     # Download data for each sector ETF
     tickers = ['XLK', 'XLV', 'XLE', 'XLF']

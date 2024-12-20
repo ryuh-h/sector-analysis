@@ -6,14 +6,19 @@ from dtaidistance import dtw
 import os
 
 def perform_clustering(filename, root_dir, n_clusters=3):
-    # Load the cleaned data
+    # Define paths
     input_path = os.path.join(root_dir, 'data', 'cleaned', filename)
     output_dir = os.path.join(root_dir, 'data', 'final')
 
-    # Print debug information to ensure correct paths
+    # Print input and output paths for verification
     print(f"Input Path: {input_path}")
     print(f"Output Directory: {output_dir}")
 
+    # Create the final directory if it doesn't exist
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
+    # Load data
     data = pd.read_csv(input_path)
 
     # Apply a moving average to smooth the 'Close' column
@@ -27,7 +32,7 @@ def perform_clustering(filename, root_dir, n_clusters=3):
     kmeans = KMeans(n_clusters=n_clusters, n_init=10, random_state=42)
     data['KMeans_Cluster'] = kmeans.fit_predict(normalized_data)
 
-    # Gaussian Mixture Model Clustering
+    # Gaussian Mixture Model (GMM) Clustering
     gmm = GaussianMixture(n_components=n_clusters, random_state=42)
     data['GMM_Cluster'] = gmm.fit_predict(normalized_data)
 
@@ -38,13 +43,8 @@ def perform_clustering(filename, root_dir, n_clusters=3):
         dtw_distances.append(dtw_distance)
     data['DTW_Distance'] = [0] + dtw_distances  # Pad first value with 0
 
-    # Add major market events (for context in later visualizations)
-    # Example: Add a 'Major_Event' column marking significant events
+    # Add marker for major market event (for context in later visualizations)
     data['Major_Event'] = data['Date'].apply(lambda x: 'Pandemic' if '2020' in str(x) else 'None')
-
-    # Ensure the final directory exists
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
 
     # Extract base name for output file
     basename = filename.replace('_cleaned.csv', '')
@@ -55,11 +55,11 @@ def perform_clustering(filename, root_dir, n_clusters=3):
     print(f"Saving clustered data to: {output_path}")  # Debug statement
     data.to_csv(output_path, index=False)
 
-if __name__ == "__main__":
-    # Determine root directory for testing purposes
-    ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    # Define cleaned data directory
+# Testing
+if __name__ == "__main__":
+    # Define paths
+    ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     cleaned_data_dir = os.path.join(ROOT_DIR, 'data', 'cleaned')
 
     # Get a list of all CSV files in the cleaned directory

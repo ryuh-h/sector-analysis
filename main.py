@@ -7,11 +7,12 @@ from scripts import visualisation
 from scripts import evaluation
 import os
 
-# Define the root directory of the project.
+# Define the root directory of the project
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 
+
 def main():
-    # Define tickers and their descriptive names
+    # Define tickers and their sector names
     tickers = ['XLK', 'XLV', 'XLE', 'XLF']
     ticker_names = {
         'XLK': 'Tech',
@@ -20,15 +21,15 @@ def main():
         'XLF': 'Finance'
     }
 
-    # cleaned directory and files
+    # Cleaned directory and files
     cleaned_data_dir = os.path.join(ROOT_DIR, 'data', 'cleaned')
     cleaned_files = [file for file in os.listdir(cleaned_data_dir) if file.endswith('.csv')]
 
-    # final directory and files
+    # Final directory and files
     final_data_dir = os.path.join(ROOT_DIR, 'data', 'final')
     final_files = [file for file in os.listdir(final_data_dir) if file.endswith('_clustered.csv')]
 
-    # model directory and files
+    # Model directory and files
     model_dir = os.path.join(ROOT_DIR, 'models')
     model_files = [file for file in os.listdir(model_dir) if file.endswith('_lstm_model.keras')]
 
@@ -40,7 +41,7 @@ def main():
     # Step 2: Data Preprocessing
     print("Starting Data Preprocessing:")
     for ticker in tickers:
-        descriptive_name = ticker_names[ticker]  # Get the descriptive name for the ticker
+        descriptive_name = ticker_names[ticker]
         output_file = f'{descriptive_name}'
         data_preprocessing.preprocess_data(ticker, output_file)
 
@@ -82,6 +83,7 @@ def main():
             print(f"No corresponding model found for {clustered_file}.")
 
     print("Workflow Completed Successfully.")
+
 
 if __name__ == "__main__":
     main()

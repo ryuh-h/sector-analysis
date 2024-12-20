@@ -7,15 +7,18 @@ import pandas as pd
 import os
 
 
-# Define LSTM training function
 def train_lstm(filename, root_dir):
-    # Load the cleaned and clustered data
+    # Define paths
     input_path = os.path.join(root_dir, 'data', 'final', filename)
     output_dir = os.path.join(root_dir, 'models')
 
-    # Print debug information to ensure correct paths
+    # Print input and output paths for verification
     print(f"Input Path: {input_path}")
     print(f"Output Directory: {output_dir}")
+
+    # Create the models directory if it doesn't exist
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
 
     # Load data
     data = pd.read_csv(input_path)
@@ -50,10 +53,6 @@ def train_lstm(filename, root_dir):
     # Train LSTM model
     model.fit(X_train, y_train, epochs=10, batch_size=32, validation_split=0.2)
 
-    # Ensure the models directory exists
-    if not os.path.exists(output_dir):
-        os.makedirs(output_dir)
-
     # Save the trained model to the models directory in the new Keras format
     basename = filename.replace('_clustered.csv', '')
     model_output_path = os.path.join(output_dir, f'{basename}_lstm_model.keras')
@@ -61,11 +60,10 @@ def train_lstm(filename, root_dir):
     print(f'Model for {basename} saved successfully.')
 
 
+# Testing
 if __name__ == "__main__":
-    # Determine root directory for testing purposes
+    # Determine paths
     ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
-
-    # Define final data directory
     final_data_dir = os.path.join(ROOT_DIR, 'data', 'final')
 
     # Print debug information for root directory and final data directory

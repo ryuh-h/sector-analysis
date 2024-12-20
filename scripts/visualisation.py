@@ -5,23 +5,17 @@ import seaborn as sns
 
 def create_visualisations(filename, root_dir):
     try:
-        # Load the final clustered dataset
+        # Define paths
         input_path = os.path.join(root_dir, 'data', 'final', filename)
         visualisations_dir = os.path.join(root_dir, 'visualisations')
 
-        # Print debug information for verification
+        # Print input and output paths for verification
         print(f"Input Path: {input_path}")
         print(f"Visualisations Directory: {visualisations_dir}")
 
         # Load data
         data = pd.read_csv(input_path)
         filename = filename.replace('_clustered.csv', '')
-
-        # Ensure 'Date' is parsed correctly as datetime
-        if 'Date' in data.columns:
-            data['Date'] = pd.to_datetime(data['Date'], errors='coerce')
-        else:
-            raise ValueError("The 'Date' column is missing from the dataset.")
 
         # Visualisation 1: Closing Prices Over Time (Individual)
         if 'Close' in data.columns:
@@ -57,7 +51,7 @@ def create_visualisations(filename, root_dir):
 
 def create_comparative_visualisations(root_dir):
     try:
-        # Define final data directory
+        # Define paths
         final_data_dir = os.path.join(root_dir, 'data', 'final')
         visualisations_dir = os.path.join(root_dir, 'visualisations')
 
@@ -96,7 +90,7 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, 'all_sectors_gmm_clusters.png'))
             plt.close()
 
-        # New Comparative Visualisation: Cluster Membership Over Time for Each Sector (Stacked for All Sectors)
+        # Comparative Visualisation 3: Cluster Membership Over Time for Each Sector (Stacked for All Sectors)
         if 'KMeans_Cluster' in combined_data.columns:
             sectors = combined_data['Sector'].unique()
             fig, axes = plt.subplots(4, 1, figsize=(12, 20), sharex=True)
@@ -125,7 +119,7 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, 'stacked_cluster_membership_over_time_gmm.png'))
             plt.close()
 
-        # Comparative Visualisation 3: Dynamic Time Warping Distances Over Time (Subplots for All Sectors, Improved)
+        # Comparative Visualisation 4: Dynamic Time Warping Distances Over Time (Subplots for All Sectors)
         if 'DTW_Distance' in combined_data.columns:
             sectors = combined_data['Sector'].unique()
             fig, axes = plt.subplots(4, 1, figsize=(12, 20), sharex=True)
@@ -143,7 +137,7 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, 'all_sectors_dtw_distances.png'))
             plt.close()
 
-        # Comparative Visualisation 4: Time-Sliced Correlation Heatmaps of Closing Prices
+        # Comparative Visualisation 5: Time-Sliced Correlation Heatmaps of Closing Prices
         pivot_data = combined_data.pivot(index='Date', columns='Sector', values='Close')
         time_slices = ['2014-2016', '2017-2019', '2020-2024']
         for time_slice in time_slices:
@@ -156,7 +150,7 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, f'correlation_heatmap_{time_slice}.png'))
             plt.close()
 
-        # Comparative Visualisation 5: Volatility Over Time for All Sectors (Combined Plot for Comparison)
+        # Comparative Visualisation 6: Volatility Over Time for All Sectors (Combined Plot for Comparison)
         plt.figure(figsize=(12, 8))
         for sector in sectors:
             sector_data = combined_data[combined_data['Sector'] == sector].copy()
@@ -170,49 +164,49 @@ def create_comparative_visualisations(root_dir):
         plt.savefig(os.path.join(visualisations_dir, 'all_sectors_combined_volatility.png'))
         plt.close()
 
-        # Cluster Centroid Visualisations
-        for cluster_col in ['KMeans_Cluster', 'GMM_Cluster']:
-            if cluster_col in combined_data.columns:
-                centroids = combined_data.groupby(['Sector', cluster_col])[
-                    ['Smoothed_Close', 'Volatility']].mean().reset_index()
-
-                # Plot Centroids for Smoothed Close Price
-                plt.figure(figsize=(12, 8))
-                sns.barplot(data=centroids, x='Sector', y='Smoothed_Close', hue=cluster_col, palette='viridis')
-                plt.title(f'Cluster Centroids for Smoothed Close Price (by {cluster_col})')
-                plt.xlabel('Sector')
-                plt.ylabel('Average Smoothed Close')
-                plt.xticks(rotation=45)
-                plt.tight_layout()
-                plt.savefig(os.path.join(visualisations_dir, f'{cluster_col}_centroids_smoothed_close.png'))
-                plt.close()
-
-                # Plot Centroids for Volatility
-                plt.figure(figsize=(12, 8))
-                sns.barplot(data=centroids, x='Sector', y='Volatility', hue=cluster_col, palette='plasma')
-                plt.title(f'Cluster Centroids for Volatility (by {cluster_col})')
-                plt.xlabel('Sector')
-                plt.ylabel('Average Volatility')
-                plt.xticks(rotation=45)
-                plt.tight_layout()
-                plt.savefig(os.path.join(visualisations_dir, f'{cluster_col}_centroids_volatility.png'))
-                plt.close()
+        # # Cluster Centroid Visualisations
+        # for cluster_col in ['KMeans_Cluster', 'GMM_Cluster']:
+        #     if cluster_col in combined_data.columns:
+        #         centroids = combined_data.groupby(['Sector', cluster_col])[
+        #             ['Smoothed_Close', 'Volatility']].mean().reset_index()
+        #
+        #         # Plot Centroids for Smoothed Close Price
+        #         plt.figure(figsize=(12, 8))
+        #         sns.barplot(data=centroids, x='Sector', y='Smoothed_Close', hue=cluster_col, palette='viridis')
+        #         plt.title(f'Cluster Centroids for Smoothed Close Price (by {cluster_col})')
+        #         plt.xlabel('Sector')
+        #         plt.ylabel('Average Smoothed Close')
+        #         plt.xticks(rotation=45)
+        #         plt.tight_layout()
+        #         plt.savefig(os.path.join(visualisations_dir, f'{cluster_col}_centroids_smoothed_close.png'))
+        #         plt.close()
+        #
+        #         # Plot Centroids for Volatility
+        #         plt.figure(figsize=(12, 8))
+        #         sns.barplot(data=centroids, x='Sector', y='Volatility', hue=cluster_col, palette='plasma')
+        #         plt.title(f'Cluster Centroids for Volatility (by {cluster_col})')
+        #         plt.xlabel('Sector')
+        #         plt.ylabel('Average Volatility')
+        #         plt.xticks(rotation=45)
+        #         plt.tight_layout()
+        #         plt.savefig(os.path.join(visualisations_dir, f'{cluster_col}_centroids_volatility.png'))
+        #         plt.close()
 
         print('Comparative visualisations saved successfully.')
 
     except Exception as e:
-        print(f"Error during comparative visualisation creation: {e}")
+        print(f"Error during creating comparative visualisation: {e}")
         if 'combined_data' in locals():
             print(f"Available columns in combined dataset: {combined_data.columns.tolist()}")
 
-if __name__ == "__main__":
-    # Define the root directory for testing
-    ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    # Define final data directory
+# Testing
+if __name__ == "__main__":
+    # Define paths
+    ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     final_data_dir = os.path.join(ROOT_DIR, 'data', 'final')
 
-    # Print debug information
+    # Print debug information root directory and final data directory
     print(f"Root Directory: {ROOT_DIR}")
     print(f"Final Data Directory: {final_data_dir}")
 

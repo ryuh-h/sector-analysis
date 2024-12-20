@@ -7,8 +7,8 @@ from sklearn.preprocessing import MinMaxScaler
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-# Function to evaluate the clustering effectiveness using Silhouette Score and store results
 
+# Function to evaluate the clustering effectiveness using Silhouette Score and store results
 def evaluate_clustering(filename, root_dir):
     try:
         # Load the clustered dataset
@@ -21,21 +21,21 @@ def evaluate_clustering(filename, root_dir):
         print(f"Error during clustering evaluation for {filename}: {e}")
         return None
 
-# Function to evaluate LSTM model's performance and store metrics
 
+# Function to evaluate LSTM model's performance and store metrics
 def evaluate_lstm(test_filename, model_filename, root_dir):
     try:
-        # Define paths for the test data and model
+        # Define paths
         test_data_path = os.path.join(root_dir, 'data', 'final', test_filename)
         model_path = os.path.join(root_dir, 'models', model_filename)
 
-        # Debug: Ensure paths are correct
+        # Print input and output paths for verification
         print(f"Loading test data from: {test_data_path}")
         print(f"Loading model from: {model_path}")
 
         # Check if the model file exists
         if not os.path.exists(model_path):
-            print(f"Error: Model file '{model_path}' not found. Please ensure the file path is correct.")
+            print(f"Error: Model file '{model_path}' not found.")
             return None, None, None, None
 
         # Load the test dataset and the trained model
@@ -73,20 +73,21 @@ def evaluate_lstm(test_filename, model_filename, root_dir):
         print(f'Root Mean Square Error (RMSE): {rmse:.4f}')
 
         return mae, rmse, actual_values, predictions
+
     except Exception as e:
         print(f"Error during LSTM evaluation for {test_filename}: {e}")
         return None, None, None, None
 
-if __name__ == "__main__":
-    # Define the root directory of the project
-    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    # Define directories for clustered CSV files, model files, and visualisations
+# Testing
+if __name__ == "__main__":
+    # Define paths
+    root_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     final_data_dir = os.path.join(root_dir, 'data', 'final')
     model_dir = os.path.join(root_dir, 'models')
     visualisations_dir = os.path.join(root_dir, 'visualisations')
 
-    # Ensure visualisations directory exists
+    # Create the visualisations directory if it doesn't exist
     if not os.path.exists(visualisations_dir):
         os.makedirs(visualisations_dir)
 

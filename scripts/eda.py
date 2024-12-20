@@ -4,11 +4,11 @@ import seaborn as sns
 import os
 
 def perform_eda(filename, root_dir):
-    # Define paths relative to the project root directory
+    # Define paths
     input_path = os.path.join(root_dir, 'data', 'cleaned', filename)
     output_dir = os.path.join(root_dir, 'visualisations')
 
-    # Print debug information to ensure correct paths
+    # Print input and output paths for verification
     print(f"Input Path: {input_path}")
     print(f"Output Directory: {output_dir}")
 
@@ -19,20 +19,12 @@ def perform_eda(filename, root_dir):
     # Load data
     data = pd.read_csv(input_path)
 
-    # Ensure the 'Date' column is properly formatted
-    data['Date'] = pd.to_datetime(data['Date'], format="%Y-%m-%d %H:%M:%S%z", errors='coerce')
+    # Ensure 'Date' is in datime format
+    data['Date'] = pd.to_datetime(data['Date'])
 
-    # Drop rows where 'Date' could not be converted
-    data = data.dropna(subset=['Date'])
-
-    # Ensure numeric columns are properly formatted
-    data['Close'] = pd.to_numeric(data['Close'], errors='coerce')
+    # Create 'Daily_Return' column
     data['Daily_Return'] = data['Close'].pct_change()
     data['Daily_Return'] = pd.to_numeric(data['Daily_Return'], errors='coerce')
-
-    # Replace inf values with NaN and drop rows with NaN
-    data.replace([float('inf'), -float('inf')], float('nan'), inplace=True)
-    data.dropna(inplace=True)
 
     # Remove outliers based on Daily_Return IQR method
     Q1 = data['Daily_Return'].quantile(0.25)
@@ -50,8 +42,8 @@ def perform_eda(filename, root_dir):
     print(f"Average Daily Return for {filename}: {avg_return:.7f}")
     print(f"Volatility for {filename}: {volatility:.7f}")
 
-    # Drop NaNs again right before plotting to ensure clean data
-    data.dropna(inplace=True)
+    # Drop NaN values
+    data = data.dropna()
 
     # Extract the base name for saving plots
     base_name = filename.replace('_cleaned.csv', '')
@@ -81,7 +73,7 @@ def perform_eda(filename, root_dir):
     plt.savefig(daily_return_plot_path)
     plt.close()
 
-    # Identify major macroeconomic events and their impacts (example: COVID-19)
+    # Identify major macroeconomic events and their impacts (COVID-19)
     covid_start = pd.to_datetime('2020-03-01')
     plt.figure(figsize=(10, 6))
     sns.lineplot(data=data, x='Date', y='Close', label='Closing Price')
@@ -97,11 +89,11 @@ def perform_eda(filename, root_dir):
     plt.savefig(covid_impact_plot_path)
     plt.close()
 
-if __name__ == "__main__":
-    # Determine root directory for testing purposes
-    ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
-    # Define cleaned data directory
+# Testing
+if __name__ == "__main__":
+    # Define paths
+    ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
     cleaned_data_dir = os.path.join(ROOT_DIR, 'data', 'cleaned')
 
     # Get a list of all CSV files in the cleaned directory

@@ -14,18 +14,19 @@ def preprocess_data(input_filename, output_filename):
     # Load data
     data = pd.read_csv(input_path)
 
-    # Drop rows 2 and 3
+    # Drop redundant rows 2 and 3
     data = data.drop(index=[0, 1])
 
     # Rename the first column to 'Date' if it is incorrectly named
     if data.columns[0] != 'Date':
         data.rename(columns={data.columns[0]: 'Date'}, inplace=True)
 
-    # Convert 'Date' column to datetime with explicit format
-    data['Date'] = pd.to_datetime(data['Date'], errors='coerce')
+    # Convert 'Date' column to datetime format
+    data['Date'] = pd.to_datetime(data['Date'], format="%Y-%m-%d %H:%M:%S%z", errors='coerce')
 
-    # Drop rows with any other missing values
+    # Drop rows with NaN or infinite values
     initial_shape = data.shape
+    data.replace([float('inf'), -float('inf')], float('nan'), inplace=True)
     data = data.dropna()
     print(f"Dropped rows with any missing values. Shape before: {initial_shape}, after: {data.shape}")
 
@@ -34,9 +35,10 @@ def preprocess_data(input_filename, output_filename):
         data.to_csv(output_path, index=False)
         print(f'Cleaned data saved to {output_path}')
     else:
-        print(f"No data to save after preprocessing for file {input_filename}.")
+        print(f"No data to save for {input_filename}.")
 
 
+# Testing
 if __name__ == "__main__":
     # Preprocess data for each raw dataset
     raw_files = ['XLK_data.csv', 'XLV_data.csv', 'XLE_data.csv', 'XLF_data.csv']
