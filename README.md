@@ -1,4 +1,4 @@
-# Sector Analysis using LSTM and Clustering Techniques
+# Financial Analysis using LSTM and Clustering Techniques
 
 This project analyzes key financial sectors, including **Technology**, **Healthcare**, **Energy**, and **Finance**, using historical stock data to understand market trends and predict future movements. The project leverages **LSTM** (Long Short-Term Memory) neural networks for time-series forecasting and employs clustering techniques (**K-Means** and **Gaussian Mixture Models**) to identify underlying patterns in the data. Visualisations are used throughout to provide intuitive insights.
 
