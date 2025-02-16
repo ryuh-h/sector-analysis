@@ -8,7 +8,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 
-# Function to evaluate the clustering effectiveness using Silhouette Score and store results
+# Function to measures how well K-Means clustering assigned each data to each cluster, measured using Silhouette score
+# that measures the likeliness of the points within each cluster measured from 0 to 1
 def evaluate_clustering(filename, root_dir):
     try:
         # Load the clustered dataset
@@ -40,31 +41,36 @@ def evaluate_lstm(test_filename, model_filename, root_dir):
 
         # Load the test dataset and the trained model
         test_data = pd.read_csv(test_data_path)['Close'].values.reshape(-1, 1)
-        model = tf.keras.models.load_model(model_path)  # Load `.keras` format
+        model = tf.keras.models.load_model(model_path)  # Load .keras format
 
-        # Normalize test data
+        # Normalize test data, LSTM works better when data normalised from 0 to 1
         scaler = MinMaxScaler(feature_range=(0, 1))
         test_data_normalized = scaler.fit_transform(test_data)
 
-        # Prepare test data for LSTM model input
+        # Prepare training data (X_train, y_train) to predict the next value
+        # LSTM remembers n-periods in its memory cells, then uses this n-periods to make a prediction on the n+1 day
+        # 5 days are used as prediction periods to predict the 15th day's stock prices
         timesteps = 5
         X_test = np.array([test_data_normalized[i:i + timesteps] for i in range(len(test_data_normalized) - timesteps)])
         y_test = test_data[timesteps:].flatten()
 
         # Make predictions
         predictions = model.predict(X_test).flatten()
-        predictions = scaler.inverse_transform(predictions.reshape(-1, 1)).flatten()  # Rescale predictions back to original scale
+        predictions = scaler.inverse_transform(predictions.reshape(-1, 1)).flatten()  # Undo normalisation
 
-        # Adjust actual values to match the length of predictions
+        # Ensures the actual and predicted data have the same number of points
         actual_values = y_test
         min_length = min(len(actual_values), len(predictions))
-
         # Truncate both arrays to have the same length
         actual_values = actual_values[:min_length]
         predictions = predictions[:min_length]
 
         # Calculate evaluation metrics
+        # 1.Mean absolute error - Calculates the average error between actual vs predicted, measures how wrong the
+        # model is on average, treats all errors equally, applied when all errors should be minimised
         mae = mean_absolute_error(actual_values, predictions)
+        # 2.Root Mean Squared Error - Calculates the average error between actual vs predicted, measures how wrong the
+        # model is on average, but penalises large errors more than MAE, applied when large prediction errors are costly
         rmse = np.sqrt(mean_squared_error(actual_values, predictions))
 
         # Print the evaluation results

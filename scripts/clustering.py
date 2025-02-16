@@ -22,21 +22,29 @@ def perform_clustering(filename, root_dir, n_clusters=3):
     data = pd.read_csv(input_path)
 
     # Apply a moving average to smooth the 'Close' column
+    # Helps capture general trend and remove the noise of daily fluctuations
     data['Smoothed_Close'] = data['Close'].rolling(window=30, min_periods=1).mean()
 
     # Standardise the smoothed 'Close' columns for clustering
+    # All values Mean: 0 and Standard Deviation: 1
+    # All values are centered around the mean at 0 to ensure the min & max values have similiar importance in clustering
     scaler = StandardScaler()
     normalized_data = scaler.fit_transform(data[['Smoothed_Close']])
 
     # K-Means Clustering
+    # Groups similar stock performance to see if there is a pattern/trend, splits data into n_clusters
     kmeans = KMeans(n_clusters=n_clusters, n_init=10, random_state=42)
     data['KMeans_Cluster'] = kmeans.fit_predict(normalized_data)
 
     # Gaussian Mixture Model (GMM) Clustering
+    # Similar to K-Means, but assigns probability to each point rather than hard assignment, making it more flexible
+    # and can capture more complex market movements
     gmm = GaussianMixture(n_components=n_clusters, random_state=42)
     data['GMM_Cluster'] = gmm.fit_predict(normalized_data)
 
     # Dynamic Time Warping (DTW) Distance Calculation
+    # Measures how similarly time-series data moves, even if movement at different speeds
+    # Measures whether 2+ stocks move in unison, even at varying rates
     dtw_distances = []
     for i in range(len(normalized_data) - 1):
         dtw_distance = dtw.distance(normalized_data[i], normalized_data[i + 1])
@@ -52,7 +60,7 @@ def perform_clustering(filename, root_dir, n_clusters=3):
     output_path = os.path.join(output_dir, output_filename)
 
     # Save clustered data to final directory
-    print(f"Saving clustered data to: {output_path}")  # Debug statement
+    print(f"Saving clustered data to: {output_path}")
     data.to_csv(output_path, index=False)
 
 

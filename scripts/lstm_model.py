@@ -27,33 +27,37 @@ def train_lstm(filename, root_dir):
     data = data[['Close']].values
 
     # Normalize data to range [0, 1] using MinMaxScaler
+    # Ensures all values lies between 0 and 1, LSTM works best this way
     scaler = MinMaxScaler(feature_range=(0, 1))
     data = scaler.fit_transform(data)
 
-    # Split data into training and testing datasets
+    # Split data into 80% training and 20% testing datasets
     train_size = int(len(data) * 0.8)
     train_data, test_data = data[:train_size], data[train_size:]
 
     # Prepare training data (X_train, y_train) to predict the next value
-    timesteps = 14  # Use more historical data for better predictions
-    X_train = np.array([train_data[i:i + timesteps] for i in range(len(train_data) - timesteps)])
-    y_train = np.array([train_data[i + timesteps] for i in range(len(train_data) - timesteps)])
+    # LSTM remembers n-periods in its memory cells, then uses this n-periods to make a prediction on the n+1 day
+    # 14 days are used as prediction periods to predict the 15th day's stock prices
+    timesteps = 14
+    X_train = np.array([train_data[i:i + timesteps] for i in range(len(train_data) - timesteps)])  # 14 days prediction
+    y_train = np.array([train_data[i + timesteps] for i in range(len(train_data) - timesteps)])  # 15th day predicted
 
-    # Prepare testing data (X_test, y_test) for evaluation
+    # Prepare testing data (X_test, y_test) for evaluation.py
     X_test = np.array([test_data[i:i + timesteps] for i in range(len(test_data) - timesteps)])
     y_test = np.array([test_data[i + timesteps] for i in range(len(test_data) - timesteps)])
 
     # Define LSTM model
     model = Sequential()
-    model.add(Input(shape=(timesteps, 1)))
-    model.add(LSTM(700, return_sequences=False))  # Predict only the next value, hence return_sequences=False
-    model.add(Dense(1))
-    model.compile(optimizer='adam', loss='mean_squared_error')
+    model.add(Input(shape=(timesteps, 1)))  # Accepts the input sequence of 14 days
+    model.add(LSTM(700, return_sequences=False))  # Learns patterns. Predict only next value -> return_sequences=False
+    model.add(Dense(1))  # Outputs predicted stock price
+    model.compile(optimizer='adam', loss='mean_squared_error')  # 'adam' training method, MSE measures prediction errors
 
     # Train LSTM model
     model.fit(X_train, y_train, epochs=10, batch_size=32, validation_split=0.2)
 
-    # Save the trained model to the models directory in the new Keras format
+    # Save the trained model to the models directory in the .keras format
+    # Tensorflow's .keras is the newer format that has more optimisations over the older .h5 format
     basename = filename.replace('_clustered.csv', '')
     model_output_path = os.path.join(output_dir, f'{basename}_lstm_model.keras')
     model.save(model_output_path)

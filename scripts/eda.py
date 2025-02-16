@@ -27,6 +27,8 @@ def perform_eda(filename, root_dir):
     data['Daily_Return'] = pd.to_numeric(data['Daily_Return'], errors='coerce')
 
     # Remove outliers based on Daily_Return IQR method
+    # Financial data could contain extreme daily returns due to market crashes or earnings announcements,
+    # removing extreme values makes the dataset more stable for analysis, clustering and LSTM model performance.
     Q1 = data['Daily_Return'].quantile(0.25)
     Q3 = data['Daily_Return'].quantile(0.75)
     IQR = Q3 - Q1
@@ -42,7 +44,7 @@ def perform_eda(filename, root_dir):
     print(f"Average Daily Return for {filename}: {avg_return:.7f}")
     print(f"Volatility for {filename}: {volatility:.7f}")
 
-    # Drop NaN values
+    # Drop NaN values to be sure
     data = data.dropna()
 
     # Extract the base name for saving plots
@@ -57,7 +59,7 @@ def perform_eda(filename, root_dir):
     plt.xticks(rotation=45)
     plt.tight_layout()
     closing_price_plot_path = os.path.join(output_dir, f'{base_name}_closing_prices.png')
-    print(f"Saving closing prices plot to: {closing_price_plot_path}")  # Debug statement
+    print(f"Saving closing prices plot to: {closing_price_plot_path}")
     plt.savefig(closing_price_plot_path)
     plt.close()
 
@@ -69,7 +71,7 @@ def perform_eda(filename, root_dir):
     plt.ylabel('Frequency')
     plt.tight_layout()
     daily_return_plot_path = os.path.join(output_dir, f'{base_name}_daily_returns.png')
-    print(f"Saving daily returns plot to: {daily_return_plot_path}")  # Debug statement
+    print(f"Saving daily returns plot to: {daily_return_plot_path}")
     plt.savefig(daily_return_plot_path)
     plt.close()
 
@@ -85,7 +87,7 @@ def perform_eda(filename, root_dir):
     plt.legend()
     plt.tight_layout()
     covid_impact_plot_path = os.path.join(output_dir, f'{base_name}_covid_impact.png')
-    print(f"Saving COVID-19 impact plot to: {covid_impact_plot_path}")  # Debug statement
+    print(f"Saving COVID-19 impact plot to: {covid_impact_plot_path}")
     plt.savefig(covid_impact_plot_path)
     plt.close()
 
@@ -99,7 +101,7 @@ def perform_eda(filename, root_dir):
     plt.xticks(rotation=45)
     plt.tight_layout()
     volatility_plot_path = os.path.join(output_dir, f'{base_name}_volatility.png')
-    print(f"Saving volatility plot to: {volatility_plot_path}")  # Debug statement
+    print(f"Saving volatility plot to: {volatility_plot_path}")
     plt.savefig(volatility_plot_path)
     plt.close()
 
