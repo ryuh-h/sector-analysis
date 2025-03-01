@@ -1,3 +1,21 @@
+"""
+clustering.py
+
+This module applies clustering techniques to group financial sectors based on their historical trends.
+It uses K-Means and Gaussian Mixture Models (GMM) to identify sector similarities and Dynamic Time Warping (DTW) for
+time-series distance measurement.
+
+Key Tasks:
+- Normalize and preprocess sector data for clustering
+- Apply K-Means and GMM clustering
+- Compute Dynamic Time Warping (DTW) distances
+
+Functions:
+- perform_clustering(filename, root_dir, n_clusters=3):
+  Loads cleaned data, applies clustering models, and saves clustered datasets in `data/final/`.
+
+"""
+
 from sklearn.cluster import KMeans
 from sklearn.mixture import GaussianMixture
 from sklearn.preprocessing import StandardScaler

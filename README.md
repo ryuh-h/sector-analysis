@@ -17,7 +17,7 @@ This project analyzes key financial sectors, including **Technology**, **Healthc
 
 - **Visualisations**: Created to explore trends, evaluate the impact of key macroeconomic events (e.g., COVID-19), and analyze clusters.
 
-The project is organized into multiple steps: **data collection**, **preprocessing**, **exploratory data analysis (EDA)**, **clustering**, **LSTM model training**, **visualisations**, and **evaluation**.
+The project is organized into multiple steps: **data collection**, **cleaning**, **exploratory data analysis (EDA)**, **clustering**, **LSTM model training**, **visualisations**, and **evaluation**.
 
 ## Project Structure
 The project is organized into the following main folders and scripts:
@@ -35,7 +35,7 @@ FYP Code/
 │
 ├── scripts/
 │   ├── data_collection.py  # Downloads historical stock data from Yahoo Finance
-│   ├── data_preprocessing.py # Preprocesses raw data (cleaning, feature engineering)
+│   ├── data_cleaning.py    # Cleaning raw data (cleaning, feature engineering)
 │   ├── eda.py              # Conducts exploratory data analysis and visualisations
 │   ├── clustering.py       # Clusters sectors based on historical trends
 │   ├── lstm_model.py       # Trains LSTM models for sector prediction
@@ -52,7 +52,7 @@ FYP Code/
 1. **Data Collection**:
    - Downloads historical data for the four sectors (XLK, XLV, XLE, XLF).
 
-2. **Data Preprocessing**:
+2. **Data Cleaning**:
    - Cleans data, converts data types, removes outliers, and calculates new features like daily returns.
 
 3. **Exploratory Data Analysis (EDA)**:

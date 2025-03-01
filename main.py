@@ -1,5 +1,21 @@
+"""
+main.py
+
+This is the driver code that runs the full workflow of the project from data collection to model evaluation.
+
+Key Steps:
+1. Data Collection (`data_collection.py`)
+2. Data Cleaning (`data_cleaning.py`)
+3. Exploratory Data Analysis (`eda.py`)
+4. Clustering (`clustering.py`)
+5. LSTM Model Training (`lstm_model.py`)
+6. Visualizations (`visualisation.py`)
+7. Evaluation (`evaluation.py`)
+
+"""
+
 from scripts import data_collection
-from scripts import data_preprocessing
+from scripts import data_cleaning
 from scripts import eda
 from scripts import clustering
 from scripts import lstm_model
@@ -38,13 +54,13 @@ def main():
     for ticker in tickers:
         data_collection.download_data(ticker)
 
-    # Step 2: Data Preprocessing
-    print("Starting Data Preprocessing:")
+    # Step 2: Data Cleaning
+    print("Starting Data Cleaning:")
     for ticker in tickers:
         descriptive_name = ticker_names[ticker]
         output_file = f'{descriptive_name}'
-        data_preprocessing.preprocess_data(ticker, output_file)
-
+        data_cleaning.clean_data(ticker, output_file)
+    #
     # Step 3: Exploratory Data Analysis
     print("Performing EDA:")
     for cleaned_file in cleaned_files:

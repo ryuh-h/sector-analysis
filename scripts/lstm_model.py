@@ -1,3 +1,20 @@
+"""
+lstm_model.py
+
+This module trains Long Short-Term Memory (LSTM) models to predict future stock prices based on historical data.
+It preprocesses the data, splits it into training and testing sets, and trains the LSTM network.
+
+Key Tasks:
+- Normalize stock prices using MinMaxScaler
+- Train LSTM models for each financial sector
+- Save trained models in the `models/` directory
+
+Functions:
+- train_lstm(filename, root_dir):
+  Reads a clustered dataset, trains an LSTM model, and saves the trained model.
+
+"""
+
 import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential

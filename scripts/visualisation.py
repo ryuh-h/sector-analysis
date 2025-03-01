@@ -1,3 +1,21 @@
+"""
+visualisation.py
+
+This module generates visualisations for financial sector analysis, clustering results, and LSTM predictions.
+
+Key Tasks:
+- Create sector-wise visualisations for closing prices and volatility
+- Generate comparative clustering visualisations for all sectors
+- Save visualisations in the `visualisations/` directory
+
+Functions:
+- create_visualisations(filename, root_dir):
+  Generates visualisations for individual sectors.
+- create_comparative_visualisations(root_dir):
+  Generates comparative sector visualisations across multiple datasets.
+
+"""
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt

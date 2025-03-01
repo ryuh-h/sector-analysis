@@ -1,3 +1,21 @@
+"""
+data_collection.py
+
+This module downloads historical stock market data for selected Exchange-Traded Funds (ETFs) using the yfinance library.
+It retrieves daily stock price data and saves it as CSV files in the `data/raw/` directory for further processing.
+
+ETFs Covered:
+- XLK (Technology)
+- XLV (Healthcare)
+- XLE (Energy)
+- XLF (Finance)
+
+Functions:
+- download_data(ticker, start_date='2014-01-01', end_date='2024-01-01'):
+  Fetches stock data for a given ticker within the specified time range and saves it to CSV.
+
+"""
+
 import yfinance as yf
 import os
 

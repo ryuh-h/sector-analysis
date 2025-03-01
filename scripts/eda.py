@@ -1,3 +1,20 @@
+"""
+eda.py
+
+This module conducts Exploratory Data Analysis (EDA) on the cleaned stock market data.
+It generates summary statistics and visualizations to identify trends and patterns.
+
+Key Tasks:
+- Calculate basic statistics (mean, standard deviation, etc.)
+- Generate plots for closing prices and daily returns
+- Remove outliers using the Interquartile Range (IQR) method
+
+Functions:
+- perform_eda(filename, root_dir):
+  Reads a cleaned dataset, performs EDA, and saves the visualizations in `visualisations/`.
+
+"""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
@@ -19,8 +36,7 @@ def perform_eda(filename, root_dir):
     # Load data
     data = pd.read_csv(input_path)
 
-    # Ensure 'Date' is in datime format
-    data['Date'] = pd.to_datetime(data['Date'], format="%Y-%m-%d %H:%M:%S%z", errors='coerce')
+    data['Date'] = pd.to_datetime(data['Date'], format="%Y-%m-%d", errors='coerce')
 
     # Create 'Daily_Return' column
     data['Daily_Return'] = data['Close'].pct_change()
@@ -43,9 +59,6 @@ def perform_eda(filename, root_dir):
     volatility = data['Daily_Return'].std()
     print(f"Average Daily Return for {filename}: {avg_return:.7f}")
     print(f"Volatility for {filename}: {volatility:.7f}")
-
-    # Drop NaN values to be sure
-    data = data.dropna()
 
     # Extract the base name for saving plots
     base_name = filename.replace('_cleaned.csv', '')
@@ -76,7 +89,7 @@ def perform_eda(filename, root_dir):
     plt.close()
 
     # Identify major macroeconomic events and their impacts (COVID-19)
-    covid_start = pd.to_datetime('2020-03-01')
+    covid_start = pd.to_datetime('2020-03-01', format="%Y-%m-%d")
     plt.figure(figsize=(10, 6))
     sns.lineplot(data=data, x='Date', y='Close', label='Closing Price')
     plt.axvline(x=covid_start, color='r', linestyle='--', label='COVID-19 Start')

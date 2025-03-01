@@ -1,3 +1,21 @@
+"""
+evaluation.py
+
+This module evaluates the performance of clustering techniques and LSTM models.
+
+Key Tasks:
+- Compute Silhouette Scores for K-Means clustering
+- Evaluate LSTM model accuracy using MAE and RMSE
+- Generate evaluation metrics visualizations
+
+Functions:
+- evaluate_clustering(filename, root_dir):
+  Computes the Silhouette Score for sector clusters.
+- evaluate_lstm(test_filename, model_filename, root_dir):
+  Loads a trained LSTM model and evaluates its predictive accuracy.
+
+"""
+
 import os
 from sklearn.metrics import silhouette_score, mean_absolute_error, mean_squared_error
 import pandas as pd
