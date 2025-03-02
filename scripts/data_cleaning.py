@@ -43,7 +43,7 @@ def clean_data(input_filename, output_filename):
 
     # Drop rows with NaN or infinite values
     initial_shape = data.shape
-    data.replace([float('inf'), -float('inf')], float('nan'), inplace=True)
+    data = data.replace([float('inf'), -float('inf')], float('nan'))
     data = data.dropna()
     print(f"Dropped rows with any missing values. Shape before: {initial_shape}, after: {data.shape}")
 
