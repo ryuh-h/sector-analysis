@@ -43,6 +43,20 @@ def create_comparative_visualisations(root_dir):
         if 'Volatility' not in combined_data.columns and 'Close' in combined_data.columns:
             combined_data['Volatility'] = combined_data.groupby('Sector')['Close'].transform(lambda x: x.rolling(window=30).std())
 
+        # Define color palette for distinct clusters
+        cluster_palette = {0: "purple", 1: "blue", 2: "orange"}
+
+        # Define sectors
+        sectors = ['Tech', 'Healthcare', 'Finance', 'Energy']
+
+        # Define color palette for each sector
+        sector_palette = {
+            'Tech': "red",
+            'Healthcare': "green",
+            'Finance': "orange",
+            'Energy': "blue"
+        }
+
         # Comparative Visualisation 1: K-Means Clustering Results (All Sectors)
         if 'KMeans_Cluster' in combined_data.columns:
             plt.figure(figsize=(12, 8))
@@ -55,17 +69,37 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, 'all_sectors_kmeans_clusters.png'))
             plt.close()
 
-        # Comparative Visualisation 2: Gaussian Mixture Model Clustering Results (All Sectors)
-        if 'GMM_Cluster' in combined_data.columns:
-            plt.figure(figsize=(12, 8))
-            sns.scatterplot(data=combined_data, x='Date', y='Close', hue='GMM_Cluster', style='Sector', palette='plasma')
-            plt.title('GMM Clustering Results for All Sectors')
-            plt.xlabel('Date')
-            plt.ylabel('Close Price')
-            plt.xticks(rotation=45)
-            plt.tight_layout()
-            plt.savefig(os.path.join(visualisations_dir, 'all_sectors_gmm_clusters.png'))
-            plt.close()
+        # Comparative Visualisation 2: K-Means Clustering Results (Separate Sectors)
+        # Define figure and axes for K-Means
+        fig_kmeans, axes_kmeans = plt.subplots(2, 2, figsize=(14, 10), sharex=True)
+        axes_kmeans_dict = {
+            'Tech': axes_kmeans[0, 0],
+            'Healthcare': axes_kmeans[0, 1],
+            'Finance': axes_kmeans[1, 0],
+            'Energy': axes_kmeans[1, 1]
+        }
+        for sector in sectors:
+            ax = axes_kmeans_dict[sector]
+            sector_data = combined_data[combined_data['Sector'] == sector]
+            # Line plot for smoother cluster trends
+            sns.lineplot(
+                data=sector_data,
+                x='Date',
+                y='Close',
+                hue='KMeans_Cluster',
+                palette=cluster_palette,
+                linewidth=2,
+                ax=ax
+            )
+            ax.set_title(f"{sector} - K-Means Clustered Trends")
+            ax.set_xlabel("Date")
+            ax.set_ylabel("Closing Price")
+            ax.legend(title="Cluster")
+            ax.grid(True, linestyle="--", alpha=0.5)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(os.path.join(visualisations_dir, "separate_sector_kmeans_clusters.png"))
+        plt.close()
 
         # Comparative Visualisation 3: K-Means Cluster Membership Over Time for Each Sector (All Sectors)
         if 'KMeans_Cluster' in combined_data.columns:
@@ -83,7 +117,51 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, 'stacked_cluster_membership_over_time_kmeans.png'))
             plt.close()
 
-        # Comparative Visualisation 4: GMM Cluster Membership Over Time for Each Sector (All Sectors)
+        # Comparative Visualisation 4: Gaussian Mixture Model Clustering Results (All Sectors)
+        if 'GMM_Cluster' in combined_data.columns:
+            plt.figure(figsize=(12, 8))
+            sns.scatterplot(data=combined_data, x='Date', y='Close', hue='GMM_Cluster', style='Sector', palette='plasma')
+            plt.title('GMM Clustering Results for All Sectors')
+            plt.xlabel('Date')
+            plt.ylabel('Close Price')
+            plt.xticks(rotation=45)
+            plt.tight_layout()
+            plt.savefig(os.path.join(visualisations_dir, 'all_sectors_gmm_clusters.png'))
+            plt.close()
+
+        # Comparative Visualisation 5: Gaussian Mixture Model Clustering Results (Separate Sectors)
+        # Define figure and axes for GMM
+        fig_gmm, axes_gmm = plt.subplots(2, 2, figsize=(14, 10), sharex=True)
+        axes_gmm_dict = {
+            'Tech': axes_gmm[0, 0],
+            'Healthcare': axes_gmm[0, 1],
+            'Finance': axes_gmm[1, 0],
+            'Energy': axes_gmm[1, 1]
+        }
+        for sector in sectors:
+            ax = axes_gmm_dict[sector]
+            sector_data = combined_data[combined_data['Sector'] == sector]
+            # Line plot for smoother cluster trends
+            sns.lineplot(
+                data=sector_data,
+                x='Date',
+                y='Close',
+                hue='GMM_Cluster',
+                palette=cluster_palette,
+                linewidth=2,
+                ax=ax
+            )
+            ax.set_title(f"{sector} - GMM Clustered Trends")
+            ax.set_xlabel("Date")
+            ax.set_ylabel("Closing Price")
+            ax.legend(title="Cluster")
+            ax.grid(True, linestyle="--", alpha=0.5)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(os.path.join(visualisations_dir, "separate_sector_gmm_clusters.png"))
+        plt.close()
+
+        # Comparative Visualisation 6: GMM Cluster Membership Over Time for Each Sector (All Sectors)
         if 'GMM_Cluster' in combined_data.columns:
             fig, axes = plt.subplots(4, 1, figsize=(12, 20), sharex=True)
             for i, sector in enumerate(sectors):
@@ -97,7 +175,7 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, 'stacked_cluster_membership_over_time_gmm.png'))
             plt.close()
 
-        # Comparative Visualisation 5: Dynamic Time Warping Distances Over Time (All Sectors)
+        # Comparative Visualisation 7: Dynamic Time Warping Distances Over Time (All Sectors)
         if 'DTW_Distance' in combined_data.columns:
             sectors = combined_data['Sector'].unique()
             fig, axes = plt.subplots(4, 1, figsize=(12, 20), sharex=True)
@@ -115,7 +193,7 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, 'all_sectors_dtw_distances.png'))
             plt.close()
 
-        # Comparative Visualisation 6: Time-Sliced Correlation Heatmaps of Closing Prices
+        # Comparative Visualisation 8: Time-Sliced Correlation Heatmaps of Closing Prices
         pivot_data = combined_data.pivot(index='Date', columns='Sector', values='Close')
         time_slices = ['2014-2016', '2017-2019', '2020-2024']
         for time_slice in time_slices:
@@ -128,7 +206,7 @@ def create_comparative_visualisations(root_dir):
             plt.savefig(os.path.join(visualisations_dir, f'correlation_heatmap_{time_slice}.png'))
             plt.close()
 
-        # Comparative Visualisation 7: Volatility Over Time for All Sectors
+        # Comparative Visualisation 9: Volatility Over Time (All Sectors)
         plt.figure(figsize=(12, 8))
         for sector in sectors:
             sector_data = combined_data[combined_data['Sector'] == sector].copy()
@@ -142,13 +220,42 @@ def create_comparative_visualisations(root_dir):
         plt.savefig(os.path.join(visualisations_dir, 'all_sectors_combined_volatility.png'))
         plt.close()
 
+        # Comparative Visualisation 10: Volatility Over Time (Separate Sectors)
+        # Define figure and axes for Volatility
+        fig_volatility, axes_volatility = plt.subplots(2, 2, figsize=(14, 10), sharex=True)
+        axes_volatility_dict = {
+            'Tech': axes_volatility[0, 0],
+            'Healthcare': axes_volatility[0, 1],
+            'Finance': axes_volatility[1, 0],
+            'Energy': axes_volatility[1, 1]
+        }
+        for sector in sectors:
+            ax = axes_volatility_dict[sector]
+            # Line plot for sector volatility
+            sns.lineplot(
+                data=sector_data,
+                x='Date',
+                y='Volatility',
+                color=sector_palette[sector],
+                linewidth=2,
+                ax=ax
+            )
+            ax.set_title(f"{sector} - Volatility Over Time")
+            ax.set_xlabel("Date")
+            ax.set_ylabel("Volatility (Rolling Std Dev)")
+            ax.grid(True, linestyle="--", alpha=0.5)
+        plt.xticks(rotation=45)
+        plt.tight_layout()
+        plt.savefig(os.path.join(visualisations_dir, "separate_sector_volatility.png"))
+        plt.close()
+
         # Cluster Centroid Visualisation
         for cluster_col in ['KMeans_Cluster', 'GMM_Cluster']:
             if cluster_col in combined_data.columns:
                 centroids = combined_data.groupby(['Sector', cluster_col])[
                     ['Smoothed_Close', 'Volatility']].mean().reset_index()
 
-                # Comparative Visualisation  8 & 9: Plot Centroids for Smoothed Close Price
+                # Comparative Visualisation  11 & 12: Plot Centroids for Smoothed Close Price
                 plt.figure(figsize=(12, 8))
                 sns.barplot(data=centroids, x='Sector', y='Smoothed_Close', hue=cluster_col, palette='viridis')
                 plt.title(f'Cluster Centroids for Smoothed Close Price (by {cluster_col})')
@@ -159,7 +266,7 @@ def create_comparative_visualisations(root_dir):
                 plt.savefig(os.path.join(visualisations_dir, f'{cluster_col}_centroids_smoothed_close.png'))
                 plt.close()
 
-                # Comparative Visualisation  10 & 11: Plot Centroids for Volatility
+                # Comparative Visualisation  13 & 14: Plot Centroids for Volatility
                 plt.figure(figsize=(12, 8))
                 sns.barplot(data=centroids, x='Sector', y='Volatility', hue=cluster_col, palette='plasma')
                 plt.title(f'Cluster Centroids for Volatility (by {cluster_col})')
@@ -187,11 +294,6 @@ if __name__ == "__main__":
     # Print debug information root directory and final data directory
     print(f"Root Directory: {ROOT_DIR}")
     print(f"Final Data Directory: {final_data_dir}")
-
-    # Run visualisation for each clustered dataset in the final directory
-    for filename in os.listdir(final_data_dir):
-        if filename.endswith('_clustered.csv'):
-            create_visualisations(filename, ROOT_DIR)
 
     # Run comparative visualisations for all datasets
     create_comparative_visualisations(ROOT_DIR)

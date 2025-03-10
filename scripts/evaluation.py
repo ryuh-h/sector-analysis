@@ -199,3 +199,31 @@ if __name__ == "__main__":
         plt.savefig(output_path_pred)
         plt.close()
         print(f"LSTM Predictions visualisation saved to: {output_path_pred}")
+
+    # Visualise LSTM Predictions vs Actual for separate sectors
+    fig, axes = plt.subplots(2, 2, figsize=(14, 10), sharex=True)
+    # Define sector-to-subplot mapping
+    axes_dict = {
+        'Tech': axes[0, 0],
+        'Healthcare': axes[0, 1],
+        'Finance': axes[1, 0],
+        'Energy': axes[1, 1]
+    }
+    # Loop through sectors and plot individually
+    for i, sector_name in enumerate(sector_names):
+        if i < len(lstm_predictions):
+            ax = axes_dict[sector_name]
+            # Plot actual vs predicted values
+            ax.plot(lstm_actuals[i], label=f'Actual Values', linestyle='-', alpha=0.6, color='blue')
+            ax.plot(lstm_predictions[i], label=f'Predicted Values', linestyle='--', alpha=0.6, color='red')
+            ax.set_title(f'LSTM Predictions - {sector_name}')
+            ax.set_xlabel('Time')
+            ax.set_ylabel('Closing Price')
+            ax.legend()
+            ax.grid(True, linestyle="--", alpha=0.5)
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+    plt.savefig(os.path.join(visualisations_dir, "separate_sector_lstm_predictions.png"))
+    plt.close()
+    print(
+        f"Separate LSTM Predictions visualisation saved to: {os.path.join(visualisations_dir, 'separate_sector_lstm_predictions.png')}")

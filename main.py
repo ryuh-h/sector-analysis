@@ -9,7 +9,7 @@ Key Steps:
 3. Exploratory Data Analysis (`eda.py`)
 4. Clustering (`clustering.py`)
 5. LSTM Model Training (`lstm_model.py`)
-6. Visualizations (`visualisation.py`)
+6. Visualisations (`visualisation.py`)
 7. Evaluation (`evaluation.py`)
 
 """
@@ -60,7 +60,7 @@ def main():
         descriptive_name = ticker_names[ticker]
         output_file = f'{descriptive_name}'
         data_cleaning.clean_data(ticker, output_file)
-    #
+
     # Step 3: Exploratory Data Analysis
     print("Performing EDA:")
     for cleaned_file in cleaned_files:

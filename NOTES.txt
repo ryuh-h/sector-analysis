@@ -8,7 +8,16 @@
     IDEs only know about the reference tensorflow holds to the keras module and not its content.
     https://stackoverflow.com/questions/71000250/import-tensorflow-keras-could-not-be-resolved-after-upgrading-to-tensorflow-2
 
-Once you finished with Pycharm, make the entire project runnnable as python applicaion.
+Once you finished with Pycharm, make the entire project runnable as python application.
+Run from terminal.
 Investigate a bit about "setup.py" files-technology to do final deliverables.
 
 If you feel confident, would try a simple GUI for this? You only Tkinter.
+
+your project almost done. now that you almost finished.
+Why don't make your program as a console interpreter, so that
+ _ tickers
+ - help
+ - sector analysis
+ - alias 
+ - reset

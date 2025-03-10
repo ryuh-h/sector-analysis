@@ -45,7 +45,7 @@ def perform_clustering(filename, root_dir, n_clusters=3):
 
     # Standardise the smoothed 'Close' columns for clustering
     # All values Mean: 0 and Standard Deviation: 1
-    # All values are centered around the mean at 0 to ensure the min & max values have similiar importance in clustering
+    # All values are centered around the mean at 0 to ensure the min & max values have similar importance in clustering
     scaler = StandardScaler()
     normalized_data = scaler.fit_transform(data[['Smoothed_Close']])
 
