@@ -37,17 +37,14 @@ def main():
         'XLF': 'Finance'
     }
 
-    # Cleaned directory and files
+    # Cleaned directory
     cleaned_data_dir = os.path.join(ROOT_DIR, 'data', 'cleaned')
-    cleaned_files = [file for file in os.listdir(cleaned_data_dir) if file.endswith('.csv')]
 
-    # Final directory and files
+    # Final directory
     final_data_dir = os.path.join(ROOT_DIR, 'data', 'final')
-    final_files = [file for file in os.listdir(final_data_dir) if file.endswith('_clustered.csv')]
 
-    # Model directory and files
+    # Model directory
     model_dir = os.path.join(ROOT_DIR, 'models')
-    model_files = [file for file in os.listdir(model_dir) if file.endswith('_lstm_model.keras')]
 
     # Step 1: Data Collection
     print("Starting Data Collection:")
@@ -60,6 +57,9 @@ def main():
         descriptive_name = ticker_names[ticker]
         output_file = f'{descriptive_name}'
         data_cleaning.clean_data(ticker, output_file)
+
+    # Cleaned files
+    cleaned_files = [file for file in os.listdir(cleaned_data_dir) if file.endswith('.csv')]
 
     # Step 3: Exploratory Data Analysis
     print("Performing EDA:")
@@ -80,6 +80,12 @@ def main():
     # Step 6: Visualisations
     print("Creating Visualisations:")
     visualisation.create_comparative_visualisations(ROOT_DIR)
+
+    # Final data files
+    final_files = [file for file in os.listdir(final_data_dir) if file.endswith('_clustered.csv')]
+
+    # Model files
+    model_files = [file for file in os.listdir(model_dir) if file.endswith('_lstm_model.keras')]
 
     # Step 7: Evaluation
     print("Evaluating Models:")
